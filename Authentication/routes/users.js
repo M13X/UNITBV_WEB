@@ -2,8 +2,9 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 var pg = require('pg');
-var conString = process.env.ELEPHANTSQL_URL || "postgres://vvtvxtci:h4smDLI0EeR6WeorXCHwpsa-lNoj7vcX@horton.elephantsql.com:5432/vvtvxtci";
-var client = new pg.Client(conString);
+const config = require('../config/database');
+var client = new pg.Client(config.database);
+const passport = require('passport');
 let User = require('../models/user');
 
 
@@ -53,7 +54,8 @@ router.post('/register',function(req,res){
         }
         else{
           console.log('New user added to database');
-          res.redirect('/user/login');
+          req.flash('success','You are now registered and can log in');
+          res.redirect('/users/login');
         }
         client.end();
         });
@@ -66,6 +68,7 @@ router.get('/login',function(req,res){
   res.render('login');
 });
 //Login Submit
+/*
 router.post('/login', function(req, res){
   var user = new User();
   user.username = req.body.username;
@@ -82,6 +85,13 @@ router.post('/login', function(req, res){
     }
     client.end();
   });
+});*/
+// Login Process
+router.post('/login', function(req, res, next){
+  passport.authenticate('local', {
+    successRedirect:'/',
+    failureRedirect:'/users/login',
+    failureFlash: true
+  })(req, res, next);
 });
-
 module.exports = router;
