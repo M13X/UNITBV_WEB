@@ -4,7 +4,7 @@ var bodyParser = require('body-parser');
 var pg = require('pg');
 var conString = process.env.ELEPHANTSQL_URL || "postgres://vvtvxtci:h4smDLI0EeR6WeorXCHwpsa-lNoj7vcX@horton.elephantsql.com:5432/vvtvxtci";
 var client = new pg.Client(conString);
-
+const expressValidator = require('express-validator');
 //Init app
 const app = express();
 
@@ -15,13 +15,14 @@ app.set('view engine','pug');
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
-
+app.use(expressValidator());
 // parse application/json
 app.use(bodyParser.json())
 
 //Set Public Folder
 app.use(express.static(path.join(__dirname,'public')));
 //Database connection
+/*
 client.connect(function(err) {
   if(err) {
     return console.error('could not connect to postgres', err);
@@ -29,7 +30,7 @@ client.connect(function(err) {
   else{
     return console.log('Connected to ElephantSQL Database');
   }
-});
+});*/
 //Home
 app.get('/',function(req,res){
   res.render('index');
@@ -44,9 +45,13 @@ app.get('/',function(req,res){
       console.log(result.rows[i].username+' '+result.rows[i].email);
     }
   }
-  client.end();
+  //client.end();
   });
 });
+
+//route
+let users = require('./routes/users');
+app.use('/users',users);
 /*
 //Admin
 app.get('/admin',function(req,res){
@@ -61,53 +66,7 @@ app.get('/admin',function(req,res){
     }
   });
 });*/
-//Login
-app.get('/login',function(req,res){
-  res.render('login');
-});
-//Login Submit
-app.post('/login', function(req, res){
-  var user = new User();
-  user.username = req.body.username;
-  user.password = req.body.password;
-  client.query('SELECT * FROM users WHERE username = $1 AND password = $2',[user.username,user.password], function(err, result) {
-    if(err) {
-      return console.error('error running query', err);
-    }
-    else if (result.rows.length!=0){
-      console.log("Log");
-    }
-    else{
-      console.log("Username or password incorrect");
-    }
-    client.end();
-  });
-});
-//Register
-app.get('/register',function(req,res){
-  res.render('register');
-});
-//Register Submit
-app.post('/register',function(req,res){
-  console.log('Register submitted');
-  var user = new User();
-  user.username = req.body.username;
-  user.email = req.body.email;
-  user.password = req.body.password;
-  //Insert into Database
-  client.query('INSERT into Users(username,email,password) VALUES($1,$2,$3)',[user.username,user.email,user.password],function(err,result){
-  if(err){
-    console.log('Register insert error');
-  }
-  else{
-    console.log('New user inserted into databse');
-  }
-  client.end();
-  });
 
-  //console.log(req.body.username);
-  return;
-});
 //Start server
 app.listen(3000,function(){
   console.log('Server started on port 3000');

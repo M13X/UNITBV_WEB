@@ -2,13 +2,12 @@ extends layout
 
 block content
   h1 Login
-  form(method='POST', action='/login')
+  form(method='POST', action='/users/login')
     #form-group
       label Username:
       input.form-control(name='username',type='text')
     #form-group
       label Password:
       input.form-control(name='password',type='password')
-    input.btn.btn-primary(type='submit',value='Submit')
-    h4
-      a(href='/register') Create account
+    input.btn.btn-primary(type='submit',value='Submit', style='margin: 5px 0px 0px 0px')      
+    a.btn.btn-default(href='/users/register', style='margin: 5px 0px 0px 5px') Create account

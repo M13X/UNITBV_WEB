@@ -24,4 +24,6 @@ npm install --save body-parser
 npm install --save mongoose
 npm install -g bower
 bower install bootstrap
+npm install express-validator
+npm install --save passport passport-local bcryptjs
 ```
