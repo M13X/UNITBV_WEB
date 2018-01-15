@@ -50,7 +50,7 @@ router.post('/register',function(req,res){
         client.query('INSERT into Users(username,email,password) VALUES($1,$2,$3)',[newUser.username,newUser.email,newUser.password],function(err,result){
         if(err){
           console.log('Register insert error: '+err);
-          console.log(newUser.password);
+//          console.log(newUser.password);
         }
         else{
           console.log('New user added to database');

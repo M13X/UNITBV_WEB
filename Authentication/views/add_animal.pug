@@ -1,0 +1,18 @@
+extends layout
+
+block content
+  h1 #{title}
+  form(method='POST', action='/animals/add')
+    #form-group
+      label Name:
+      input.form-control(name='name', type='text')
+    #form-group
+      label Type:
+      input.form-control(name='type', type='text')
+    #form-group
+      label Breed:
+      input.form-control(name='breed', type='text')
+    #form-group
+      label Birth Year:
+      input.form-control(name='birth', type='text')
+    input.btn.btn-primary(type='submit', value='Submit', style='margin: 5px 0px 0px 0px')

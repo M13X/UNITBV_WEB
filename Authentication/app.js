@@ -93,21 +93,9 @@ app.get('/',function(req,res){
 
 //route
 let users = require('./routes/users');
-app.use('/users',users);
-/*
-//Admin
-app.get('/admin',function(req,res){
-  User.find({}, function(err, users){
-    if(err){
-      console.log(err);
-    }
-    else{
-      res.render('admin',{
-        username: username
-      });
-    }
-  });
-});*/
+let animals = require('./routes/animals');
+app.use('/users', users);
+app.use('/animals', animals);
 
 //The 404 Route (ALWAYS Keep this as the last route)
 app.get('*', function(req, res){
